@@ -34,7 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,17 +46,60 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service1.cs">
+    <Compile Include="Config\Email_Config.cs" />
+    <Compile Include="Config\Log_Config.cs" />
+    <Compile Include="Config\Service_Config.cs" />
+    <Compile Include="Controllers\EnvioNFeController.cs" />
+    <Compile Include="DAO\ConfigBancoDAO.cs" />
+    <Compile Include="DAO\NfIntegradaDAO.cs" />
+    <Compile Include="Email\GuardianEmail.cs" />
+    <Compile Include="Email\PortalEmail.cs" />
+    <Compile Include="Guardian\ConexaoERP.cs" />
+    <Compile Include="Guardian\ConexaoGestor.cs" />
+    <Compile Include="Guardian\ConexaoGuardian.cs" />
+    <Compile Include="Guardian\ConexaoPortal.cs" />
+    <Compile Include="Guardian\Criptografia.cs" />
+    <Compile Include="Guardian\Guardian_LogTxt.cs" />
+    <Compile Include="Guardian\Guardian_TxtFile.cs" />
+    <Compile Include="Guardian\Guardian_Util.cs" />
+    <Compile Include="Guardian\Tabelas_Guardian.cs" />
+    <Compile Include="Guardian\Tabelas_Portal.cs" />
+    <Compile Include="MailingNFe.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Service1.Designer.cs">
-      <DependentUpon>Service1.cs</DependentUpon>
+    <Compile Include="MailingNFe.Designer.cs">
+      <DependentUpon>MailingNFe.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\NfIntegrada.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProjectInstaller.Designer.cs">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceLog\Guardian_Log.cs" />
+    <Compile Include="ServiceLog\LogAuditoria.cs" />
+    <Compile Include="ServiceLog\LogDAO.cs" />
+    <Compile Include="ServiceLog\LogEmail.cs" />
+    <Compile Include="ServiceLog\LogOcorrencia.cs" />
+    <Compile Include="ServiceLog\LogRotina.cs" />
+    <Compile Include="Service\ControleRotina.cs" />
+    <Compile Include="Service\Main.cs" />
+    <Compile Include="Service\RotinaEspecifica.cs" />
+    <Compile Include="Service\RotinaServico.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Template\LayoutComercial.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

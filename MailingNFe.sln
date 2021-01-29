@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailingNFe", "MailingNFe\MailingNFe.csproj", "{93C772FB-80F1-490C-9BBE-C123571E377A}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "InstallMailingNFe", "InstallMailingNFe\InstallMailingNFe.vdproj", "{562E979E-AA0E-4844-84C3-50D97CFC8A6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{93C772FB-80F1-490C-9BBE-C123571E377A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93C772FB-80F1-490C-9BBE-C123571E377A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93C772FB-80F1-490C-9BBE-C123571E377A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{562E979E-AA0E-4844-84C3-50D97CFC8A6F}.Debug|Any CPU.ActiveCfg = Debug
+		{562E979E-AA0E-4844-84C3-50D97CFC8A6F}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 ﻿namespace MailingNFe
 {
-    partial class Service1
+    partial class MailingNFe
     {
         /// <summary> 
         /// Variável de designer necessária.

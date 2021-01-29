@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MailingNFe.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
@@ -14,12 +15,18 @@ namespace MailingNFe
         /// </summary>
         static void Main()
         {
+#if (DEBUG)
+            Main main = new Main();
+            main.ExecucaoServico();
+
+#else
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new MailingNFe()
             };
             ServiceBase.Run(ServicesToRun);
+#endif
         }
     }
 }
