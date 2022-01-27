@@ -19,6 +19,7 @@ namespace MailingNFe.Controllers
         public static int HoraRotina;
 
         ConfigBancoDAO configBancoDAO = new ConfigBancoDAO();
+        NfClassificadaDAO nfClassificadaDAO = new NfClassificadaDAO();
         NfNaoIntegradaDAO nfIntegradaDAO = new NfNaoIntegradaDAO();
 
         public EnvioNFeController()
@@ -46,18 +47,24 @@ namespace MailingNFe.Controllers
                 {
                     if (Service_Config.CadastroHabilitado && ExecutarRotina)
                     {
-                        Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Iniciado);
-
-                        List<NfNaoIntegrada> nfNaoIntegradas = nfIntegradaDAO.BuscarNotas();
-
-                        if (nfNaoIntegradas.Count > 0)
+                        if (DateTime.Now.DayOfWeek == DayOfWeek.Monday || DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
                         {
-                            PortalEmail portalEmail = new PortalEmail();
-                            portalEmail.EnviarDados(nfNaoIntegradas);
-                        }
+                            Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Iniciado);
 
-                        RegistrarExecucao();
-                        Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Finalizado);
+                            List<NfNaoIntegrada> nfNaoIntegradas = nfIntegradaDAO.BuscarNotas();
+
+                            List<NfNaoClassificada> nfNaoClassificadas = nfClassificadaDAO.BuscarNotas();
+
+                            if (nfNaoIntegradas.Count > 0)
+                            {
+                                PortalEmail portalEmail = new PortalEmail();
+                                portalEmail.EnviarDados(nfNaoIntegradas, nfNaoClassificadas);
+                            }
+
+                            RegistrarExecucao();
+                            Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Finalizado);
+                        }
+                       
                     }
                 }
                 catch (Exception ex)

@@ -5,20 +5,21 @@ using MailingNFe.Model;
 using MailingNFe.ServiceLog;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace MailingNFe.Email
 {
     class PortalEmail
     {
-        public void EnviarDados(List<NfNaoIntegrada> naoIntegrada)
+        public void EnviarDados(List<NfNaoIntegrada> naoIntegrada, List<NfNaoClassificada> naoClassificada)
         {
             ConfigBancoDAO bancoDAO = new ConfigBancoDAO();
             List<string> emailsDestino = new List<string>();
             emailsDestino = bancoDAO.BuscarEmails();
 
+            //emailsDestino.Add("all@lbeb.com.br");
             //emailsDestino.Add("guardian.developer004@lbeb.com.br");
-            //emailsDestino.Add("guardian.suporte@lbeb.com.br");
 
             try
             {
@@ -30,12 +31,26 @@ namespace MailingNFe.Email
                 }
 
                 string notasNaoIntegradas = "";
+                string notasNaoClassificadas = "";
                 int count = 0;
-
+                int countClass = 0;
+                double countEmiss = 0;
+                string cor = "";
                 foreach (var item in naoIntegrada)
                 {
+                    DateTime emiss = DateTime.ParseExact(item.Emissao, "yyyyMMdd", CultureInfo.CreateSpecificCulture("pt-BR"));
+                    countEmiss = emiss.Subtract(DateTime.Now).TotalDays;
+                    countEmiss = Math.Abs(countEmiss);
+
+                    if (countEmiss <= 30)
+                        cor = "#eefdec";
+                    else if (countEmiss >= 31 && countEmiss <= 60)
+                        cor = "#ffffdf";
+                    else
+                        cor = "#ffdedb";
+
                     notasNaoIntegradas +=
-                 "<tr style='vertical-align: top;' align='center'> " +
+                 "<tr style='vertical-align: top;background-color: " + cor + "' align='center'> " +
                      "<td colspan='1' align='center' style='font-weight:normal; font-size: 12px; border: thin solid black; border-right: 0px;'>" +
                         Guardian_Util.FormatarData(item.Emissao) +
                     "</td>" +
@@ -57,10 +72,51 @@ namespace MailingNFe.Email
                  "</tr>";
                     count++;
                 }
-                
+
+                foreach (var item in naoClassificada)
+                {
+                    DateTime emiss = DateTime.ParseExact(item.Emissao, "yyyyMMdd", CultureInfo.CreateSpecificCulture("pt-BR"));
+                    countEmiss = emiss.Subtract(DateTime.Now).TotalDays;
+                    countEmiss = Math.Abs(countEmiss);
+
+                    if (countEmiss <= 30)
+                        cor = "#eefdec";
+                    else if (countEmiss >= 31 && countEmiss <= 60)
+                        cor = "#ffffdf";
+                    else
+                        cor = "#ffdedb";
+
+                    notasNaoClassificadas +=
+               "<tr style='vertical-align: top; background-color: " + cor + ";' align='center'> " +
+                   "<td colspan='1' align='center' style='font-weight:normal; font-size: 12px; border: thin solid black; border-right: 0px;'>" +
+                      Guardian_Util.FormatarData(item.Emissao) +
+                  "</td>" +
+                   "<td colspan='1' align='center' style='font-weight:normal; font-size: 12px; border: thin solid black; border-right: 0px;'>" +
+                       item.Serie + " - " + item.Numero +
+                   "</td>" +
+                   "<td colspan='1' align='center' style='font-weight:normal; font-size: 12px; border: thin solid black; border-right: 0px; '>" +
+                       item.Cnpj +
+                   "</td>" +
+                   "<td colspan='1' align='center' style='font-weight:normal; font-size: 12px; border: thin solid black; border-right: 0px;'>" +
+                       item.Nome +
+                   "</td>" +
+                   "<td colspan='1' align='center' style='font-weight:normal; font-size: 12px; border: thin solid black; border-right: 0px;'>" +
+                       item.Quantidade +
+                   "</td>" +
+                   "<td colspan='1' align='center' style='font-weight:normal; font-size: 12px; border: thin solid black;'>" +
+                       item.Valor +
+                   "</td>" +
+               "</tr>";
+                    countClass++;
+                }
+
                 email.Mensagem = email.Mensagem.Replace("#DataEnvio", DateTime.Now.ToString("dd/MM/yyyy"));
+
                 email.Mensagem = email.Mensagem.Replace("#TabelaNotas", notasNaoIntegradas);
                 email.Mensagem = email.Mensagem.Replace("#notas", count.ToString());
+
+                email.Mensagem = email.Mensagem.Replace("#TabelaNaoClassificadas", notasNaoClassificadas);
+                email.Mensagem = email.Mensagem.Replace("#notaClassificadas", countClass.ToString());
 
                 email.Assunto = "Mailing Recebimento Fiscal | " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
                 email.Mensagem = email.Mensagem;
@@ -72,7 +128,7 @@ namespace MailingNFe.Email
                 string emailsLog = "";
                 foreach (string item in email.EmailsDestinatario)
                 {
-                    emailsLog += item + "; " ;
+                    emailsLog += item + "; ";
                 }
 
                 if (email.Enviar())

@@ -51,6 +51,7 @@
     <Compile Include="Config\Service_Config.cs" />
     <Compile Include="Controllers\EnvioNFeController.cs" />
     <Compile Include="DAO\ConfigBancoDAO.cs" />
+    <Compile Include="DAO\NfClassificadaDAO.cs" />
     <Compile Include="DAO\NfIntegradaDAO.cs" />
     <Compile Include="Email\GuardianEmail.cs" />
     <Compile Include="Email\PortalEmail.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Guardian\Guardian_LogTxt.cs" />
     <Compile Include="Guardian\Guardian_TxtFile.cs" />
     <Compile Include="Guardian\Guardian_Util.cs" />
+    <Compile Include="Guardian\Tabelas_ERP.cs" />
     <Compile Include="Guardian\Tabelas_Guardian.cs" />
     <Compile Include="Guardian\Tabelas_Portal.cs" />
     <Compile Include="MailingNFe.cs">
@@ -71,6 +73,7 @@
       <DependentUpon>MailingNFe.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\NfIntegrada.cs" />
+    <Compile Include="Model\NfNaoClassificada.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
