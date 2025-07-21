@@ -18,7 +18,7 @@ namespace MailingNFe.Email
             List<string> emailsDestino = new List<string>();
             emailsDestino = bancoDAO.BuscarEmails();
 
-            //emailsDestino.Add("all@lbeb.com.br");
+            emailsDestino.Add("GuardianGroup@lbeb.com.br");
             //emailsDestino.Add("guardian.developer004@lbeb.com.br");
 
             try

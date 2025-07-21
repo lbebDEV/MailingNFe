@@ -91,11 +91,11 @@ namespace MailingNFe.Service
 
         public bool AtrasoExecucao(int limiteDias)
         {
-            int diasAtraso = DateTime.Now.Subtract(UltimaExecucao).Days;
-            if (diasAtraso > limiteDias)
+            if (UltimaExecucao == DateTime.MinValue)
                 return true;
 
-            return false;
+            int diasAtraso = (DateTime.Now - UltimaExecucao).Days;
+            return diasAtraso >= limiteDias;
         }
 
     }

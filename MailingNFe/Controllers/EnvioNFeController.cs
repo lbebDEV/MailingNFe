@@ -42,29 +42,37 @@ namespace MailingNFe.Controllers
                 UltimaExecucao = BuscarUltimaExecucao();
                 Descricao = "Hora Definida: " + Hora;
                 ValidarExecucao();
+                Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, $"ValidarExecucao(): ExecutarRotina={ExecutarRotina}");
 
                 try
                 {
                     if (Service_Config.CadastroHabilitado && ExecutarRotina)
                     {
-                        if (DateTime.Now.DayOfWeek == DayOfWeek.Monday || DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+                        Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Iniciado);
+
+                        Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, "Buscando notas não integradas...");
+                        List<NfNaoIntegrada> nfNaoIntegradas = nfIntegradaDAO.BuscarNotas();
+                        Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, $"Notas não integradas encontradas: {nfNaoIntegradas.Count}");
+
+                        Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, "Buscando notas não classificadas...");
+                        List<NfNaoClassificada> nfNaoClassificadas = nfClassificadaDAO.BuscarNotas();
+                        Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, $"Notas não classificadas encontradas: {nfNaoClassificadas.Count}");
+
+                        if (nfNaoIntegradas.Count > 0)
                         {
-                            Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Iniciado);
-
-                            List<NfNaoIntegrada> nfNaoIntegradas = nfIntegradaDAO.BuscarNotas();
-
-                            List<NfNaoClassificada> nfNaoClassificadas = nfClassificadaDAO.BuscarNotas();
-
-                            if (nfNaoIntegradas.Count > 0)
-                            {
-                                PortalEmail portalEmail = new PortalEmail();
-                                portalEmail.EnviarDados(nfNaoIntegradas, nfNaoClassificadas);
-                            }
-
-                            RegistrarExecucao();
-                            Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Finalizado);
+                            Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, "Enviando dados para o e-mail...");
+                            PortalEmail portalEmail = new PortalEmail();
+                            portalEmail.EnviarDados(nfNaoIntegradas, nfNaoClassificadas);
+                            Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, "Dados enviados com sucesso.");
                         }
-                       
+                        else
+                        {
+                            Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, "Nenhuma nota para enviar.");
+                        }
+
+                        RegistrarExecucao();
+                        Guardian_Log.Log_Rotina(Sigla, Nome, Tipo.Finalizado);
+                        Guardian_LogTxt.LogAplicacao(Service_Config.NomeServico, $"Hoje é {DateTime.Now.DayOfWeek}, rotina {(DateTime.Now.DayOfWeek == DayOfWeek.Monday || DateTime.Now.DayOfWeek == DayOfWeek.Thursday ? "será" : "não será")} executada.");
                     }
                 }
                 catch (Exception ex)
